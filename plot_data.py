@@ -34,7 +34,7 @@ def plot_data(file):
     plt.ylim(-0.5, 7.5)  # Adjust based on your class range
 
     # Save the plot
-    plt.savefig('true_vs_predicted.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'figures/true_vs_predicted_{file}.png', dpi=300, bbox_inches='tight')
 
     # Show the plot
     plt.show()
