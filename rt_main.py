@@ -14,8 +14,8 @@ WINDOW_SIZE = 15
 
 # Load data
 def load_and_transform(network_voltage: float, network_current: float):
-    inputs = pd.read_csv('inputs.csv')  # Shape: (samples, 6)
-    outputs = pd.read_csv('outputs.csv')  # Shape: (samples, 1)
+    inputs = pd.read_csv('dataset/inputs.csv')  # Shape: (samples, 6)
+    outputs = pd.read_csv('dataset/outputs.csv')  # Shape: (samples, 1)
 
     data = pd.concat([inputs, outputs], axis=1).dropna()
     X = data.iloc[:, :-1].values
@@ -36,7 +36,7 @@ def rt_sim(X_scaled, y, file):
     # change the build function according to your model
     model = hf.build_optimized_model(input_shape=(WINDOW_SIZE, 6), num_classes=8)
     # Then load the weights
-    model.load_weights(f'{file}.weights.h5')
+    model.load_weights(f'trained_models/{file}.weights.h5')
     # Usage example:
     rt_predictor = RealTimePredictor(model, WINDOW_SIZE)
 
@@ -49,13 +49,13 @@ def rt_sim(X_scaled, y, file):
 
     plt.ion()
     fig, ax = plt.subplots(figsize=(12, 6))
-    ax.set_title('Real-Time Short Circuit Detection')
-    ax.set_xlabel('Sample Number')
-    ax.set_ylabel('Fault Class')
+    ax.set_title('Real-Time Short Circuit Detection', fontsize=14)
+    ax.set_xlabel('Sample Number', fontsize=14)
+    ax.set_ylabel('Fault Class', fontsize=14)
 
     true_line, = ax.plot([], [], 'b-', label='True Output')
     pred_line, = ax.plot([], [], 'r--', label='Predicted Output')
-    ax.legend()
+    ax.legend(fontsize=12)
     x_data = []
     true_y = []
     pred_y = []

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Model type="DAE" domain="real" method="RK4" name="TransmissionLineGammaModel">
+	<Vars> <!-- output all variables for plotting -->
+        <Var name="I_a_1" val="0"/> <!--line a current 1-->
+        <Var name="I_b_1" val="0"/> <!--line b current 1-->
+        <Var name="I_c_1" val="0"/> <!--line c current 1-->
+        <Var name="i_a_1" val="0"/> <!--line a derivative current 1-->
+        <Var name="i_b_1" val="0"/> <!--line b derivative current 1-->
+        <Var name="i_c_1" val="0"/> <!--line c derivative current 1-->
+        <Var name="I_a_2" val="0"/> <!--line a current 2-->
+        <Var name="I_b_2" val="0"/> <!--line b current 2-->
+        <Var name="I_c_2" val="0"/> <!--line c current 2-->
+        <Var name="I_a_f" val="0"/> <!--line a current 3-->
+        <Var name="I_b_f" val="0"/> <!--line b current 3-->
+        <Var name="I_c_f" val="0"/> <!--line c current 3-->
+        <Var name="I_a" val="I_a" out="true"/> <!--line current phase A-->
+        <Var name="I_b" val="I_b" out="true"/> <!--line current phase B-->
+        <Var name="I_c" val="I_c" out="true"/> <!--line current phase C-->
+	</Vars>
+	<Params dT="2e-4">  <!-- default integration step -->
+        <Param name="type" val="1"> <!-- short circuit type (1-7)-->
+        <Param name="t_start" val="0.5"/> <!-- start of short circuit-->
+        <Param name="t_end" val="0.75"/> <!-- end of short circuit-->
+        <Param name="R_a" val="10"/> <!--line resistance-->
+        <Param name="L_a" val='0.5*1e-3'/> <!--line inductance-->
+        <Param name="C_a" val='100*1e-9'/> <!--line capacitance-->
+        <Param name="R_b" val="12"/> <!--line resistance-->
+        <Param name="L_b" val='0.3*1e-3'/> <!--line inductance-->
+        <Param name="C_b" val='90*1e-9'/> <!--line capacitance-->
+        <Param name="R_c" val="11"/> <!--line resistance-->
+        <Param name="L_c" vac='0.7*1e-3'/> <!--line inductance-->
+        <Param name="C_c" val='95*1e-9'/> <!--line capacitance-->
+        <Param name="Rfault" val="5"/> <!--short circuit resistance-->
+        <Param name="V_a" val="223*sin(50*t+0)" out="true"/> <!--line A voltage-->
+        <Param name="V_b" val="218*sin(50*t-2*pi/3)" out="true"/> <!--line B voltage-->
+        <Param name="V_c" val="221*sin(50*t+2*pi/3)" out="true"/> <!--line C voltage-->
+        <Param name="V_a_deriv" val="220*50*cos(50*t+0)"/> <!--derivative line A voltage-->
+        <Param name="V_b_deriv" val="220*50*cos(50*t-2*pi/3)"/> <!--derivative line B voltage-->
+        <Param name="V_c_deriv" val="220*50*cos(50*t+2*pi/3)"/> <!--derivative line C voltage-->
+        <Param name="I_a_p" val="25*sin(50*t+0)"/> <!--line A voltage-->
+        <Param name="I_b_p" val="22*sin(50*t-2*pi/3)"/> <!--line B voltage-->
+        <Param name="I_c_p" val="23*sin(50*t+2*pi/3)"/> <!--line C voltage-->
+	</Params>
+	<ODEqs>
+        <Eq fx="I_a_1'=i_a_1"/>
+        <Eq fx="I_b_1'=i_b_1"/>
+        <Eq fx="I_a_1'=i_a_1"/>
+        <Eq fx="i_a_1'=(V_a_deriv-R_a*i_a_1-I_a_1/C_a+I_a_p/C_a)/L_a"/>
+        <Eq fx="i_b_1'=(V_a_deriv-R_b*i_b_1-I_a_1/C_b+I_b_p/C_b)/L_b"/>
+        <Eq fx="i_c_1'=(V_a_deriv-R_c*i_c_1-I_a_1/C_c+I_c_p/C_c)/L_c"/>	
+	</ODEqs>
+	<NLEqs>
+        <Eq fx="I_a_2=C*V_a_deriv"/>
+        <Eq fx="I_b_2=C*V_a_deriv"/>
+        <Eq fx="I_c_2=C*V_a_deriv"/>
+        <Eq fx="I_a=I_a_1+I_a_2+I_a_f"/>
+        <Eq fx="I_b=I_b_1+I_b_2+I_b_f"/>
+        <Eq fx="I_c=I_c_1+I_c_2+I_c_f"/>
+	</NLEqs>
+	<PostProc>
+        <Eq cond="t < t_start">
+            <Then>
+                <Eq fx="I_a_f=0"/>
+                <Eq fx="I_b_f=0"/>
+                <Eq fx="I_c_f=0"/>
+            </Then>
+        </Eq>
+        <Eq cond="t > t_start"> <!--simuate fault-->
+            <Eq cond="type=1">
+                <Then>
+                    <Eq fx="I_a_f=V_a_f/Rfault"/>
+                </Then>
+            </Eq>
+            <Eq cond="type=2">
+                <Then>
+                    <Eq fx="I_b_f=V_b_f/Rfault"/>
+                <Then/>
+            </Eq>
+            <Eq cond="type=3">
+                <Then>
+                    <Eq fx="I_a_f=(V_a_f-V_b_f)/Rfault"/>
+                    <Eq fx="I_b_f=(V_b_f-V_a_f)/Rfault"/>
+                </Then>
+            </Eq>
+            <Eq cond="type=4">
+                <Then>
+                    <Eq fx="I_c_f=V_c_f/Rfault"/>
+                </Then>
+            </Eq>
+            <Eq cond="type=5">
+                <Then>
+                    <Eq fx="I_a_f=(V_a_f-V_c_f)/Rfault"/>
+                    <Eq fx="I_c_f=(V_c_f-V_a_f)/Rfault"/>
+                </Then>
+            </Eq>
+            <Eq cond="type=6">
+                <Then>
+                    <Eq fx="I_c_f=(V_c_f-V_b_f)/Rfault"/>
+                    <Eq fx="I_b_f=(V_b_f-V_c_f)/Rfault"/>
+                </Then>
+            </Eq>
+            <Eq cond="type=7">
+                <Then>
+                    <Eq fx="I_a_f=V_a_f/Rfault"/>
+                    <Eq fx="I_b_f=V_b_f/Rfault"/>
+                    <Eq fx="I_c_f=V_c_f/Rfault"/>
+                </Then>
+            </Eq>
+        </Eq>
+        <Eq cond="t > t_stop"> <!--go back to okay state-->
+            <Then>
+                <Eq fx="I_b_f=0"/>
+                <Eq fx="I_c_f=0"/>
+                <Eq fx="I_a_f=0"/>
+            </Then>
+        </Eq>
+	</PostProc>
+</Model>

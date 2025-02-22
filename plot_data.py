@@ -7,8 +7,8 @@ WINDOW_SIZE = 15
 
 def plot_data(file):
     # Load the data
-    true_outputs = np.load(f'true_predictions_{file}.npy')
-    predicted_outputs = np.load(F'predicted_predictions_{file}.npy')
+    true_outputs = np.load(f'plot_data/true_predictions_{file}.npy')
+    predicted_outputs = np.load(F'plot_data/predicted_predictions_{file}.npy')
 
     # Create a time axis (sample numbers)
     sample_numbers = np.arange(len(true_outputs))
@@ -23,11 +23,15 @@ def plot_data(file):
     plt.scatter(errors, true_outputs[errors], color='black', label='Errors', zorder=5)
 
     # Add labels, title, and grid
-    plt.xlabel('Sample Number')
-    plt.ylabel('Fault Class')
-    plt.title('True vs Predicted Outputs')
-    plt.legend()
+    plt.xlabel('Sample Number', fontsize=14)
+    plt.ylabel('Fault Class', fontsize=14)
+    plt.title('True vs Predicted Outputs', fontsize=16)
+    plt.legend(fontsize=12)
     plt.grid(True, linestyle='--', alpha=0.6)
+
+    # Adjust tick label size
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
 
     # Adjust axis limits
     plt.xlim(0, len(true_outputs))
