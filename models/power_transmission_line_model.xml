@@ -34,9 +34,9 @@
         <Param name="V_a" val="223*sin(50*t+0)" out="true"/> <!--line A voltage-->
         <Param name="V_b" val="218*sin(50*t-2*pi/3)" out="true"/> <!--line B voltage-->
         <Param name="V_c" val="221*sin(50*t+2*pi/3)" out="true"/> <!--line C voltage-->
-        <Param name="V_a_deriv" val="220*50*cos(50*t+0)"/> <!--derivative line A voltage-->
-        <Param name="V_b_deriv" val="220*50*cos(50*t-2*pi/3)"/> <!--derivative line B voltage-->
-        <Param name="V_c_deriv" val="220*50*cos(50*t+2*pi/3)"/> <!--derivative line C voltage-->
+        <Param name="V_a_deriv" val="223*50*cos(50*t+0)"/> <!--derivative line A voltage-->
+        <Param name="V_b_deriv" val="218*50*cos(50*t-2*pi/3)"/> <!--derivative line B voltage-->
+        <Param name="V_c_deriv" val="221*50*cos(50*t+2*pi/3)"/> <!--derivative line C voltage-->
         <Param name="I_a_p" val="25*sin(50*t+0)"/> <!--line A voltage-->
         <Param name="I_b_p" val="22*sin(50*t-2*pi/3)"/> <!--line B voltage-->
         <Param name="I_c_p" val="23*sin(50*t+2*pi/3)"/> <!--line C voltage-->
