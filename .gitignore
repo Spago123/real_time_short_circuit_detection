@@ -2,3 +2,10 @@
 __pycache__
 podaci.txt
 solution
+tf_gpu_env
+paper/paper.aux
+paper/paper.bbl
+paper/paper.blg
+paper/paper.log
+paper/paper.out
+paper/svg-inkscape

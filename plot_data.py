@@ -25,20 +25,19 @@ def plot_data(file):
     # Add labels, title, and grid
     plt.xlabel('Sample Number', fontsize=14)
     plt.ylabel('Fault Class', fontsize=14)
-    plt.title('True vs Predicted Outputs', fontsize=16)
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=14)
     plt.grid(True, linestyle='--', alpha=0.6)
 
     # Adjust tick label size
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
 
     # Adjust axis limits
     plt.xlim(0, len(true_outputs))
     plt.ylim(-0.5, 7.5)  # Adjust based on your class range
 
     # Save the plot
-    plt.savefig(f'figures/true_vs_predicted_{file}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'paper/figs/true_vs_predicted_{file}.png', dpi=300, bbox_inches='tight')
 
     # Show the plot
     plt.show()
