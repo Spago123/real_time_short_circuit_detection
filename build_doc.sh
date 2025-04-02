@@ -21,6 +21,7 @@ if [ "$1" == "make" ]; then
     echo "Compilation complete. Check the output PDF."
 elif [ "$1" == "clean" ]; then
     # Remove auxiliary files
+    cd paper
     rm -rf *.aux *.bbl *.blg *.log *.out *.pdf *.toc *.lof *.lot svg-inkscape
     
     echo "Cleaned up generated files."\else
